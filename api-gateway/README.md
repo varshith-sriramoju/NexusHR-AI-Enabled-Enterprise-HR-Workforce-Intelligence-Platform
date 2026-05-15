@@ -1,37 +1,51 @@
 # api-gateway
 
-The `api-gateway` service is the single entry point for the NexusHR microservices system.
-
-## Purpose
-
-- Route external client requests to internal services
-- Centralize request handling
-- Support future cross-cutting concerns such as authentication, rate limiting, and logging
+`api-gateway` is the single entry point for NexusHR microservices.
 
 ## Port
 
 - `8080`
 
-## Technology
+## Tech Stack
 
 - Spring Boot
 - Spring Cloud Gateway
 
+## Configuration
+
+- Primary config file: `src/main/resources/application.yml`
+- Keep `src/main/resources/application.properties` empty (or remove it) for YAML-only config.
+
+Current gateway route configuration includes:
+- `/api/auth/**` -> `http://localhost:8081`
+
+Logging configured:
+- `org.springframework.cloud.gateway: DEBUG`
+
 ## Run
 
-From the `api-gateway` folder:
-
-```bash
+```powershell
+cd "D:\CODE\1\NexusHR\nexusHR\api-gateway"
 mvnw.cmd spring-boot:run
 ```
 
-## Planned Responsibilities
+## Build and Test
 
-- Route `/api/auth/**` to `auth-service`
-- Route employee APIs to `employee-service`
-- Route payroll APIs to `payroll-service`
+```powershell
+cd "D:\CODE\1\NexusHR\nexusHR\api-gateway"
+mvnw.cmd clean install
+```
 
-## Notes
+## Extending Routes
 
-- This file will be updated when gateway milestones are completed.
+Add new route blocks in `application.yml` under:
+
+```yaml
+spring:
+  cloud:
+	gateway:
+	  routes:
+```
+
+Then restart gateway to apply changes.
 

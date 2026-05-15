@@ -1,47 +1,66 @@
 # employee-service
 
-The `employee-service` manages employee master data for NexusHR.
-
-## Purpose
-
-- Maintain employee records
-- Store department and role data
-- Support HR-related employee operations
+`employee-service` handles employee and HR domain operations in NexusHR.
 
 ## Port
 
 - `8082`
 
-## Technology
+## Tech Stack
 
 - Spring Boot
 - Spring Data JPA
 - PostgreSQL
 - Flyway
 - Validation
+- Redis (as configured)
+
+## Configuration
+
+- Primary config file: `src/main/resources/application.yml`
+- Keep `src/main/resources/application.properties` empty (or remove it) for YAML-only config.
+
+Current key config areas:
+- server port
+- datasource (PostgreSQL)
+- JPA (`ddl-auto: validate`)
+- Flyway migration location
+- Redis host/port
+- JWT secret
 
 ## Run
 
-From the `employee-service` folder:
-
-```bash
+```powershell
+cd "D:\CODE\1\NexusHR\nexusHR\employee-service"
 mvnw.cmd spring-boot:run
 ```
 
-## Database
+## Build and Test
 
-- Flyway migrations are located in:
+```powershell
+cd "D:\CODE\1\NexusHR\nexusHR\employee-service"
+mvnw.cmd clean install
+```
+
+## Database and Flyway
+
+- Database: PostgreSQL
+- Migration folder:
 
 ```text
 src/main/resources/db/migration
 ```
 
-## Current Status
+## API
 
-- Flyway-based schema creation is being used
-- Schema and entity mappings will be updated as the service grows
+Common employee endpoints (subject to current controllers):
+- `POST /api/employees`
+- `GET /api/employees`
+- `GET /api/employees/{id}`
+- `DELETE /api/employees/{id}`
 
-## Notes
+## Troubleshooting
 
-- This README will be updated when employee-service milestones are completed.
+- `500 Internal Server Error` usually indicates DB connectivity, migration failure, or schema mismatch.
+- Confirm PostgreSQL is running and credentials in `application.yml` are correct.
 

@@ -1,19 +1,12 @@
 # auth-service
 
-The `auth-service` handles authentication and authorization for NexusHR.
-
-## Purpose
-
-- Register users/employees
-- Login and issue JWT access tokens
-- Refresh access tokens
-- Manage security-related logic
+`auth-service` provides authentication and authorization for NexusHR.
 
 ## Port
 
 - `8081`
 
-## Technology
+## Tech Stack
 
 - Spring Boot
 - Spring Security
@@ -24,21 +17,33 @@ The `auth-service` handles authentication and authorization for NexusHR.
 
 ## Run
 
-From the `auth-service` folder:
-
-```bash
+```powershell
+cd "D:\CODE\1\NexusHR\nexusHR\auth-service"
 mvnw.cmd spring-boot:run
 ```
 
-## Current Endpoints
+## Build and Test
+
+```powershell
+cd "D:\CODE\1\NexusHR\nexusHR\auth-service"
+mvnw.cmd clean install
+```
+
+## API Endpoints
 
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 - `POST /api/auth/refresh`
 - `POST /api/auth/logout/{userId}`
 
+## Security Rules
+
+Current rules include role checks for leave workflow endpoints:
+- `/api/leaves/apply` -> `EMPLOYEE` or `ADMIN`
+- `/api/leaves/*/approve` -> `ADMIN`
+- `/api/leaves/*/reject` -> `ADMIN`
+
 ## Notes
 
-- Security and JWT flow will be refined as milestones are completed.
-- Database schema and request/response models may evolve as features are added.
+- JWT and authorization flows should be updated alongside API/gateway changes.
 
