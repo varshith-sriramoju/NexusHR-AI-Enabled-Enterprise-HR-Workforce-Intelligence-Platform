@@ -33,6 +33,9 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/leaves/apply").hasAnyRole("EMPLOYEE", "ADMIN")
+                        .requestMatchers("/api/leaves/*/approve").hasRole("ADMIN")
+                        .requestMatchers("/api/leaves/*/reject").hasRole("ADMIN")
                         .anyRequest().permitAll()
                 )
 
