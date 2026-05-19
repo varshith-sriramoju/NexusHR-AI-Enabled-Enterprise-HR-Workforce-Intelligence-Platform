@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import {
   BarChart3,
@@ -7,13 +8,13 @@ import {
   Calendar,
   DollarSign,
   AlertCircle,
+  PieChart,
   ChevronRight,
   Bell,
   Settings,
   Menu,
   LogOut,
   Home,
-  PieChart,
   User,
   FileText,
   TrendingDown,
@@ -22,91 +23,100 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
+import {
+  getDashboardStats,
+  getDepartmentOverview,
+  getRecentActivities,
+} from "@/services/dashboardService";
+
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const {
+    data: stats = [],
+    isLoading: statsLoading,
+    error: statsError,
+  } = useQuery({
+    queryKey: ["dashboard-stats"],
+    queryFn: getDashboardStats,
+  });
+
+  const {
+    data: departments = [],
+  } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getDepartmentOverview,
+  });
+
+  const {
+    data: recentActivities = [],
+  } = useQuery({
+    queryKey: ["activities"],
+    queryFn: getRecentActivities,
+  });
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
 
-  const stats = [
-    {
-      label: "Total Employees",
-      value: "254",
-      change: "+5.2%",
-      icon: Users,
-      color: "from-blue-500 to-blue-600",
-      trend: "up",
-    },
-    {
-      label: "Present Today",
-      value: "238",
-      change: "+2.1%",
-      icon: Calendar,
-      color: "from-teal-500 to-teal-600",
-      trend: "up",
-    },
-    {
-      label: "Pending Payroll",
-      value: "$125K",
-      change: "+12.5%",
-      icon: DollarSign,
-      color: "from-cyan-500 to-cyan-600",
-      trend: "up",
-    },
-    {
-      label: "New Hires",
-      value: "12",
-      change: "+8.3%",
-      icon: TrendingUp,
-      color: "from-emerald-500 to-teal-500",
-      trend: "up",
-    },
-  ];
-
-  const departments = [
-    { name: "Engineering", employees: 45, growth: "+8.2%", avatar: "E" },
-    { name: "Sales", employees: 32, growth: "+3.1%", avatar: "S" },
-    { name: "Marketing", employees: 18, growth: "+5.6%", avatar: "M" },
-    { name: "HR", employees: 8, growth: "+0%", avatar: "H" },
-    { name: "Operations", employees: 25, growth: "+2.4%", avatar: "O" },
-    { name: "Finance", employees: 12, growth: "+1.8%", avatar: "F" },
-  ];
-
-  const recentActivities = [
-    {
-      user: "Alice Johnson",
-      action: "Updated employee record",
-      time: "2 hours ago",
-      icon: User,
-    },
-    {
-      user: "Bob Smith",
-      action: "Approved leave request",
-      time: "4 hours ago",
-      icon: Clock,
-    },
-    {
-      user: "Carol White",
-      action: "Generated monthly report",
-      time: "6 hours ago",
-      icon: FileText,
-    },
-  ];
 
   const navigationItems = [
-    { icon: Home, label: "Dashboard", active: true },
-    { icon: Users, label: "Employees" },
-    { icon: Calendar, label: "Attendance" },
-    { icon: DollarSign, label: "Payroll" },
-    { icon: PieChart, label: "Analytics" },
-    { icon: FileText, label: "Reports" },
-    { icon: Settings, label: "Settings" },
+    {
+      icon: Home,
+      label: "Dashboard",
+      active: true,
+      path: "/dashboard",
+    },
+    {
+      icon: Users,
+      label: "Employees",
+      path: "/employees",
+    },
+    {
+      icon: Calendar,
+      label: "Attendance",
+      path: "/attendance",
+    },
+    {
+      icon: DollarSign,
+      label: "Payroll",
+      path: "/payroll",
+    },
+    {
+      icon: PieChart,
+      label: "Analytics",
+      path: "/analytics",
+    },
+    {
+      icon: FileText,
+      label: "Reports",
+      path: "/reports",
+    },
+    {
+      icon: Settings,
+      label: "Settings",
+      path: "/settings",
+    },
   ];
+  const iconMap = {
+    employees: Users,
+    attendance: Calendar,
+    payroll: DollarSign,
+    hires: TrendingUp,
+    user: User,
+    report: FileText,
+    clock: Clock,
+  };
+  if (statsError) {
+    return (
+        <div className="flex items-center justify-center min-h-screen text-red-500 text-2xl font-bold">
+          Failed to load dashboard
+        </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50">
@@ -178,6 +188,7 @@ function Dashboard() {
               return (
                   <button
                       key={item.label}
+                      onClick={() => navigate(item.path)}
                       className={`w-full flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200 ${
                           item.active
                               ? "bg-gradient-to-r from-blue-600 to-teal-600 text-white"
@@ -211,45 +222,65 @@ function Dashboard() {
           </div>
 
           {/* Stats Grid */}
-          <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat) => {
-              const Icon = stat.icon;
-              return (
-                <Card
-                  key={stat.label}
-                  className="border-0 bg-white shadow-lg shadow-gray-200/20 hover:shadow-2xl hover:shadow-blue-200/20 transition-all duration-300 group"
-                >
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-600">
-                          {stat.label}
-                        </p>
-                        <p className="mt-4 text-4xl font-bold text-gray-900">
-                          {stat.value}
-                        </p>
-                        <div className="mt-3 flex items-center gap-1">
-                          {stat.trend === "up" ? (
-                            <TrendingUp className="h-4 w-4 text-emerald-500" />
-                          ) : (
-                            <TrendingDown className="h-4 w-4 text-red-500" />
-                          )}
-                          <p className="text-sm font-semibold text-emerald-600">
-                            {stat.change}
-                          </p>
-                        </div>
-                      </div>
+          {
+            statsLoading ? (
+                <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                  {Array.from({ length: 4 }).map((_, idx) => (
                       <div
-                        className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
-                      >
-                        <Icon className="h-8 w-8" />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                          key={idx}
+                          className="h-40 rounded-2xl bg-gray-200 animate-pulse"
+                      />
+                  ))}
+                </div>
+            ) : (
+                <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                  {stats.map((stat: any) => {
+
+                    const Icon =
+                        iconMap[stat.icon as keyof typeof iconMap] || Users;
+
+                    return (
+                        <Card
+                            key={stat.label}
+                            className="border-0 bg-white shadow-lg shadow-gray-200/20 hover:shadow-2xl hover:shadow-blue-200/20 transition-all duration-300 group"
+                        >
+                          <CardContent className="p-6">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm font-medium text-gray-600">
+                                  {stat.label}
+                                </p>
+
+                                <p className="mt-4 text-4xl font-bold text-gray-900">
+                                  {stat.value}
+                                </p>
+
+                                <div className="mt-3 flex items-center gap-1">
+                                  {stat.trend === "up" ? (
+                                      <TrendingUp className="h-4 w-4 text-emerald-500" />
+                                  ) : (
+                                      <TrendingDown className="h-4 w-4 text-red-500" />
+                                  )}
+
+                                  <p className="text-sm font-semibold text-emerald-600">
+                                    {stat.change}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div
+                                  className={`flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                              >
+                                <Icon className="h-8 w-8" />
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                    );
+                  })}
+                </div>
+            )
+          }
 
           {/* Main Grid */}
           <div className="grid gap-8 lg:grid-cols-3 mb-8">
@@ -271,7 +302,7 @@ function Dashboard() {
                 </div>
 
                 <div className="space-y-3">
-                  {departments.map((dept) => (
+                  {departments.map((dept: any) => (
                     <div
                       key={dept.name}
                       className="group flex items-center justify-between rounded-xl bg-gradient-to-r from-blue-50 to-teal-50 p-4 hover:from-blue-100 hover:to-teal-100 transition-all duration-200"
@@ -311,10 +342,30 @@ function Dashboard() {
                 </h3>
                 <div className="space-y-3">
                   {[
-                    { label: "Add Employee", icon: Users, color: "blue" },
-                    { label: "Run Payroll", icon: DollarSign, color: "teal" },
-                    { label: "Generate Report", icon: FileText, color: "cyan" },
-                    { label: "View Analytics", icon: BarChart3, color: "emerald" },
+                    {
+                      label: "Add Employee",
+                      icon: Users,
+                      color: "blue",
+                      path: "/employees",
+                    },
+                    {
+                      label: "Run Payroll",
+                      icon: DollarSign,
+                      color: "teal",
+                      path: "/payroll",
+                    },
+                    {
+                      label: "Generate Report",
+                      icon: FileText,
+                      color: "cyan",
+                      path: "/reports",
+                    },
+                    {
+                      label: "View Analytics",
+                      icon: BarChart3,
+                      color: "emerald",
+                      path: "/analytics",
+                    },
                   ].map((action) => {
                     const Icon = action.icon;
                     const colorClass =
@@ -326,8 +377,9 @@ function Dashboard() {
                         ? "text-cyan-600"
                         : "text-emerald-600";
                     return (
-                      <button
-                        key={action.label}
+                        <button
+                            key={action.label}
+                            onClick={() => navigate(action.path)}
                         className="w-full flex items-center gap-3 rounded-xl border border-gray-200/50 bg-gradient-to-r from-gray-50 to-gray-50 px-4 py-3 font-medium text-gray-700 hover:from-blue-50 hover:to-teal-50 hover:border-blue-200 transition-all duration-200"
                       >
                         <Icon className={`h-5 w-5 ${colorClass}`} />
@@ -349,8 +401,9 @@ function Dashboard() {
                   Recent Activities
                 </h3>
                 <div className="space-y-4">
-                  {recentActivities.map((activity, idx) => {
-                    const Icon = activity.icon;
+                  {recentActivities.map((activity: any, idx: number) => {
+                    const Icon =
+  iconMap[activity.icon as keyof typeof iconMap] || User;
                     return (
                       <div
                         key={idx}
