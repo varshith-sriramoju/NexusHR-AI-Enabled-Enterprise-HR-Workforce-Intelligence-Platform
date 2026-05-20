@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +45,8 @@ public class AttendanceService {
     public Attendance getAttendance(Long id) {
         return attendanceRepository.findById(id)
                 .orElseThrow();
+    }
+    public List<Attendance> getPendingLeaves() {
+        return attendanceRepository.findByStatus("PENDING");
     }
 }

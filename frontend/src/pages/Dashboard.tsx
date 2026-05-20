@@ -8,13 +8,11 @@ import {
   Calendar,
   DollarSign,
   AlertCircle,
-  PieChart,
   ChevronRight,
   Bell,
   Settings,
   Menu,
   LogOut,
-  Home,
   User,
   FileText,
   TrendingDown,
@@ -28,12 +26,14 @@ import {
   getDepartmentOverview,
   getRecentActivities,
 } from "@/services/dashboardService";
+import Sidebar from "../components/dashboard/Sidebar";
 
 
 function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { logout } = useAuth();
+  const { logout, role } = useAuth();
   const navigate = useNavigate();
+
   const {
     data: stats = [],
     isLoading: statsLoading,
@@ -62,45 +62,10 @@ function Dashboard() {
     navigate("/");
   };
 
+  const handleManagerDashboard = () => {
+    navigate("/manager");
+  };
 
-  const navigationItems = [
-    {
-      icon: Home,
-      label: "Dashboard",
-      active: true,
-      path: "/dashboard",
-    },
-    {
-      icon: Users,
-      label: "Employees",
-      path: "/employees",
-    },
-    {
-      icon: Calendar,
-      label: "Attendance",
-      path: "/attendance",
-    },
-    {
-      icon: DollarSign,
-      label: "Payroll",
-      path: "/payroll",
-    },
-    {
-      icon: PieChart,
-      label: "Analytics",
-      path: "/analytics",
-    },
-    {
-      icon: FileText,
-      label: "Reports",
-      path: "/reports",
-    },
-    {
-      icon: Settings,
-      label: "Settings",
-      path: "/settings",
-    },
-  ];
   const iconMap = {
     employees: Users,
     attendance: Calendar,
@@ -120,6 +85,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50">
+
       {/* Decorative Blur Elements */}
       <div className="fixed -top-40 -left-40 h-80 w-80 rounded-full bg-blue-200/20 blur-3xl pointer-events-none" />
       <div className="fixed -bottom-40 -right-40 h-80 w-80 rounded-full bg-teal-200/20 blur-3xl pointer-events-none" />
@@ -178,30 +144,9 @@ function Dashboard() {
       </header>
 
       <div className="flex">
-        {/* Sidebar Navigation */}
-        <aside className="hidden lg:flex lg:w-64 lg:flex-col bg-zinc-900 border-r border-zinc-800 min-h-screen p-6">
 
-          <nav className="space-y-2">
-            {navigationItems.map((item) => {
-              const Icon = item.icon;
+        <Sidebar />
 
-              return (
-                  <button
-                      key={item.label}
-                      onClick={() => navigate(item.path)}
-                      className={`w-full flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200 ${
-                          item.active
-                              ? "bg-gradient-to-r from-blue-600 to-teal-600 text-white"
-                              : "text-gray-300 hover:bg-zinc-800"
-                      }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                  </button>
-              );
-            })}
-          </nav>
-        </aside>
 
         {/* Mobile Sidebar Overlay */}
         {sidebarOpen && (
@@ -216,7 +161,17 @@ function Dashboard() {
           {/* Welcome Section */}
           <div className="mb-8">
             <h2 className="text-4xl font-bold text-gray-900">Welcome back! 👋</h2>
-            <p className="mt-3 text-lg text-gray-600">
+            {role === "ADMIN" && (
+              <div className="my-4">
+                <button
+                    onClick={handleManagerDashboard}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Manager Dashboard
+                </button>
+              </div>
+            )}
+            <p className="text-lg text-gray-600">
               Here's your workforce summary for today
             </p>
           </div>

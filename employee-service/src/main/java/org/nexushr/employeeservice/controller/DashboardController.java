@@ -1,34 +1,21 @@
 package org.nexushr.employeeservice.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
+import org.nexushr.employeeservice.dto.DashboardStatsDto;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@RequiredArgsConstructor
+@CrossOrigin("*")
 public class DashboardController {
 
     @GetMapping("/stats")
-    public List<Map<String, Object>> getStats() {
+    public DashboardStatsDto getStats() {
 
-        return List.of(
-                Map.of(
-                        "label", "Total Employees",
-                        "value", "254",
-                        "change", "+5.2%",
-                        "trend", "up"
-                ),
-                Map.of(
-                        "label", "Present Today",
-                        "value", "238",
-                        "change", "+2.1%",
-                        "trend", "up"
-                )
+        return new DashboardStatsDto(
+                120,
+                98,
+                5,
+                450000
         );
     }
 }

@@ -65,9 +65,14 @@ function Login() {
         password,
       });
 
-      const token = response.data.accessToken;
-      login(token);
-      navigate("/dashboard");
+      login(response.data.accessToken, response.data.role);
+      
+      // Route based on user role
+      if (response.data.role === "ADMIN") {
+        navigate("/manager");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError("Invalid credentials");
       console.error(err);

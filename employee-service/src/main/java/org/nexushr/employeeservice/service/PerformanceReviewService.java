@@ -40,4 +40,7 @@ public class PerformanceReviewService {
     public List<PerformanceReview> getEmployeeReviews(Long employeeId) {
         return repository.findByEmployeeId(employeeId);
     }
+    public List<PerformanceReview> getAllReviews() {
+        return repository.findAll();
+    }
 }

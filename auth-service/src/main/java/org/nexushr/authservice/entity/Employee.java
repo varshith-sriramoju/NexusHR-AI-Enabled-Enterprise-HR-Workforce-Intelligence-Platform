@@ -1,9 +1,13 @@
 package org.nexushr.authservice.entity;
 import jakarta.persistence.*;
+import org.nexushr.authservice.entity.Role;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 @Table(name="employees")
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -30,4 +30,9 @@ public class PerformanceReviewController {
         return service.getEmployeeReviews(employeeId);
     }
 
+    @GetMapping
+    public List<PerformanceReview> getAllReviews() {
+        return service.getAllReviews();
+    }
+
 }

@@ -6,6 +6,8 @@ import org.nexushr.employeeservice.entity.Attendance;
 import org.nexushr.employeeservice.service.AttendanceService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/attendance")
 @RequiredArgsConstructor
@@ -28,5 +30,10 @@ public class AttendanceController {
     @GetMapping("/{id}")
     public Attendance getAttendance(@PathVariable Long id) {
         return attendanceService.getAttendance(id);
+    }
+
+    @GetMapping("/leaves/pending")
+    public List<Attendance> getPendingLeaves() {
+        return attendanceService.getPendingLeaves();
     }
 }

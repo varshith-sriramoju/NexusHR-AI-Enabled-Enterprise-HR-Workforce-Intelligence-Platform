@@ -45,7 +45,16 @@ public class AuthService {
         employee.setPassword(
                 passwordEncoder.encode(request.getPassword()));
 
-        employee.setRole(Role.EMPLOYEE);
+        // Set role from request, default to EMPLOYEE if not provided
+        if (request.getRole() != null && !request.getRole().isEmpty()) {
+            try {
+                employee.setRole(Role.valueOf(request.getRole().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                employee.setRole(Role.EMPLOYEE);
+            }
+        } else {
+            employee.setRole(Role.EMPLOYEE);
+        }
 
         employeeRepository.save(employee);
 
@@ -65,6 +74,12 @@ public class AuthService {
             throw new RuntimeException("Invalid Password");
         }
 
+        // Ensure role is set, default to EMPLOYEE if null
+        if (employee.getRole() == null) {
+            employee.setRole(Role.EMPLOYEE);
+            employeeRepository.save(employee);
+        }
+
         String accessToken =
                 jwtService.generateToken(employee.getEmail());
 
@@ -78,6 +93,12 @@ public class AuthService {
 
         token.setExpiresDate(
                 LocalDateTime.now().plusDays(7));
+
+        refreshTokenRepository
+                .findByUser(employee)
+                .ifPresent(existingToken -> {
+                    refreshTokenRepository.delete(existingToken);
+                });
 
         refreshTokenRepository.save(token);
 
@@ -98,14 +119,21 @@ public class AuthService {
             throw new RuntimeException("Refresh Token Expired");
         }
 
+        Employee user = token.getUser();
+        
+        // Ensure role is set, default to EMPLOYEE if null
+        if (user.getRole() == null) {
+            user.setRole(Role.EMPLOYEE);
+            employeeRepository.save(user);
+        }
+
         String accessToken =
-                jwtService.generateToken(
-                        token.getUser().getEmail());
+                jwtService.generateToken(user.getEmail());
 
         return new AuthResponse(
                 accessToken,
                 request.getRefreshToken(),
-                token.getUser().getRole().name()
+                user.getRole().name()
         );
     }
 }
