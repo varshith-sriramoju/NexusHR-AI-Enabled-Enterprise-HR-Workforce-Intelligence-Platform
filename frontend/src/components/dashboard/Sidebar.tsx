@@ -48,7 +48,7 @@ const Sidebar = () => {
         {
             icon: Settings,
             label: "Manager",
-            path: "/manager-dashboard",
+            path: "/manager",
         },
     ];
 

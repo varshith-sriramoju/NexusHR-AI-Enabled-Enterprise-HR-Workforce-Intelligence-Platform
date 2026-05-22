@@ -5,18 +5,21 @@ import Dashboard from "../pages/Dashboard";
 import Unauthorized from "../pages/Unauthorized";
 import ProtectedRoute from "../components/ProtectedRoute";
 import RoleBasedRoute from "../components/RoleBasedRoute";
+
 import Employees from "../pages/Employees";
 import Attendance from "../pages/Attendance";
-import Payroll from "../pages/Payroll";
 import Analytics from "../pages/Analytics";
 import Reports from "../pages/Reports";
 import Settings from "../pages/Settings";
+
 import ManagerDashboard from "../pages/manager/ManagerDashboard";
-import PayrollPage from "@/pages/PayrollPage";
-import PerformancePage from "@/pages/PerformancePage";
+import PayrollPage from "../pages/PayrollPage";
+import PerformancePage from "../pages/PerformancePage";
 
 const AppRoutes = () => {
+
     return (
+
         <Routes>
 
             {/* Default Route */}
@@ -25,17 +28,19 @@ const AppRoutes = () => {
                 element={<Navigate to="/login" />}
             />
 
-            <Route path="/login" element={<Login />} />
-
+            {/* Login */}
             <Route
-                path="/dashboard"
-                element={
-                    <ProtectedRoute>
-                        <Dashboard />
-                    </ProtectedRoute>
-                }
+                path="/login"
+                element={<Login />}
             />
 
+            {/* Dashboard */}
+            <Route
+                path="/dashboard"
+                element={<Dashboard />}
+            />
+
+            {/* Employees */}
             <Route
                 path="/employees"
                 element={
@@ -45,6 +50,7 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Attendance */}
             <Route
                 path="/attendance"
                 element={
@@ -54,15 +60,27 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Payroll */}
             <Route
                 path="/payroll"
                 element={
                     <ProtectedRoute>
-                        <Payroll />
+                        <PayrollPage />
                     </ProtectedRoute>
                 }
             />
 
+            {/* Performance */}
+            <Route
+                path="/performance"
+                element={
+                    <ProtectedRoute>
+                        <PerformancePage />
+                    </ProtectedRoute>
+                }
+            />
+
+            {/* Analytics */}
             <Route
                 path="/analytics"
                 element={
@@ -72,6 +90,7 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Reports */}
             <Route
                 path="/reports"
                 element={
@@ -81,6 +100,7 @@ const AppRoutes = () => {
                 }
             />
 
+            {/* Settings */}
             <Route
                 path="/settings"
                 element={
@@ -90,11 +110,7 @@ const AppRoutes = () => {
                 }
             />
 
-            <Route
-                path="/unauthorized"
-                element={<Unauthorized />}
-            />
-
+            {/* Manager Dashboard */}
             <Route
                 path="/manager"
                 element={
@@ -103,16 +119,14 @@ const AppRoutes = () => {
                     </RoleBasedRoute>
                 }
             />
-            <Route path="/payroll" element={<PayrollPage />} />
 
-            <Route path="/performance" element={<PerformancePage />} />
-
-            <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+            {/* Unauthorized */}
+            <Route
+                path="/unauthorized"
+                element={<Unauthorized />}
+            />
 
         </Routes>
-
-
-
     );
 };
 

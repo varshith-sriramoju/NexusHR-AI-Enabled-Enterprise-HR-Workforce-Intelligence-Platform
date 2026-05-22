@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import api from "@/api/axios";
+import api from "@/lib/axios";
 import { useAuth } from "@/context/AuthContext";
 
 const features = [
@@ -60,7 +60,7 @@ function Login() {
     console.log("Password:", password);
 
     try {
-      const response = await api.post("/login", {
+      const response = await api.post("/api/auth/login", {
         email,
         password,
       });
@@ -71,6 +71,7 @@ function Login() {
       if (response.data.role === "ADMIN") {
         navigate("/manager");
       } else {
+        localStorage.setItem("token", "test");
         navigate("/dashboard");
       }
     } catch (err) {
