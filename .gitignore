@@ -41,7 +41,7 @@ build/
 /frontend/out
 
 # Environment variables
-.env
+ai-insights-service/.env
 .env.local
 .env.*.local
 .env.production.local

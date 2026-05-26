@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ai-insights-service
+  ai:
+    openai:
+      api-key: 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
+      chat:
+        options:
+          model: gpt-4o-mini
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+server:
+  port: 8086
