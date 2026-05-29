@@ -1,25 +1,21 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import type { JSX } from "react";
 
-interface RoleBasedRouteProps {
-    children: JSX.Element;
-    requiredRole: string;
+interface Props {
+    requiredRole: string[];
+    children: React.ReactNode;
 }
 
 const RoleBasedRoute = ({
-    children,
     requiredRole,
-}: RoleBasedRouteProps) => {
-    const { token, role } = useAuth();
+    children
+}: Props) => {
+    const userRole = localStorage.getItem("role");
 
-    // Check if user is authenticated
-    if (!token) {
+    if (!userRole) {
         return <Navigate to="/login" />;
     }
 
-    // Check if user has the required role
-    if (role !== requiredRole) {
+    if (!requiredRole.includes(userRole)) {
         return <Navigate to="/unauthorized" />;
     }
 

@@ -16,11 +16,25 @@ import ManagerDashboard from "../pages/manager/ManagerDashboard";
 import PayrollPage from "../pages/PayrollPage";
 import PerformancePage from "../pages/PerformancePage";
 
+import AttritionPrediction
+    from "../components/AttritionPrediction";
+import AIInsightsDashboard
+    from "../pages/AIInsightsDashboard";
+
 const AppRoutes = () => {
 
     return (
 
         <Routes>
+            {/* AI Attrition Prediction */}
+            <Route
+                path="/ai"
+                element={
+                    <ProtectedRoute>
+                        <AttritionPrediction />
+                    </ProtectedRoute>
+                }
+            />
 
             {/* Default Route */}
             <Route
@@ -114,7 +128,7 @@ const AppRoutes = () => {
             <Route
                 path="/manager"
                 element={
-                    <RoleBasedRoute requiredRole="ADMIN">
+                    <RoleBasedRoute requiredRole={["ADMIN", "MANAGER"]}>
                         <ManagerDashboard />
                     </RoleBasedRoute>
                 }
@@ -124,6 +138,11 @@ const AppRoutes = () => {
             <Route
                 path="/unauthorized"
                 element={<Unauthorized />}
+            />
+            {/*ai dashboard*/}
+            <Route
+                path="/ai-dashboard"
+                element={<AIInsightsDashboard />}
             />
 
         </Routes>
