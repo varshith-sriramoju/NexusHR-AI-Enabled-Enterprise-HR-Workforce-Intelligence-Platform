@@ -4,7 +4,7 @@ spring:
   ai:
     openai:
       base-url: https://api.groq.com/openai/v1
-      api-key: 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
+      api-key: 
       chat:
         options:
           model: llama-3.1-8b-instant
