@@ -1,4 +1,4 @@
-package org.nexushr.aiinsightsservice.config;
+package org.nexushr.notificationservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,24 +17,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             CorsConfigurationSource corsConfigurationSource) throws Exception {
-
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(
-                                "/actuator/**",
-                                "/health/**",
-                                "/api/**"
-                        ).permitAll()
+                        .requestMatchers("/actuator/**", "/health/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().permitAll()
-                )
-                .httpBasic(httpBasic -> httpBasic.disable());
+                );
 
         return http.build();
     }
 }
+

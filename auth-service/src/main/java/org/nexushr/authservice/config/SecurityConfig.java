@@ -24,6 +24,7 @@ public class SecurityConfig {
             throws Exception {
 
         http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session ->
@@ -33,6 +34,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("OPTIONS", "/**").permitAll()
                         .requestMatchers("/api/leaves/apply").hasAnyRole("EMPLOYEE", "ADMIN")
                         .requestMatchers("/api/leaves/*/approve").hasRole("ADMIN")
                         .requestMatchers("/api/leaves/*/reject").hasRole("ADMIN")
