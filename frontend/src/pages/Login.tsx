@@ -15,8 +15,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import api from "@/lib/axios";
+//import api from "@/lib/axios";
 import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
 
 const features = [
   {
@@ -60,13 +61,14 @@ function Login() {
     console.log("Password:", password);
 
     try {
-      const response = await api.post("/api/auth/login", {
-        email,
-        password,
+      const response = await axios.post("http://localhost:8081/api/auth/login", {
+        email: email,
+        password: password,
       });
+      console.log("hii..................................")
 
       login(response.data.accessToken, response.data.role);
-      
+      console.log("sssssssssssssssssssssssssssssssss")
       // Route based on user role
       if (response.data.role === "ADMIN") {
         navigate("/manager");
@@ -245,7 +247,10 @@ function Login() {
               {/* Footer */}
               <div className="pt-4 border-t border-gray-100 text-center text-xs xl:text-sm text-gray-600">
                 Don't have an account?{" "}
-                <button className="font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                <button
+                  className="font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                  onClick={() => navigate("/register")}
+                >
                   Sign up here
                 </button>
               </div>

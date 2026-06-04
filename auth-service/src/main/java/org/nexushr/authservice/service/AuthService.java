@@ -7,6 +7,7 @@ import org.nexushr.authservice.dto.RegisterRequest;
 import org.nexushr.authservice.entity.Employee;
 import org.nexushr.authservice.entity.RefreshToken;
 import org.nexushr.authservice.entity.Role;
+import org.nexushr.authservice.exception.*;
 import org.nexushr.authservice.repository.EmployeeRepository;
 import org.nexushr.authservice.repository.RefreshTokenRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +38,12 @@ public class AuthService {
 
     public String register(RegisterRequest request) {
 
+        // Check if user already exists
+        if (employeeRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new UserAlreadyExistsException(
+                    "User with email: " + request.getEmail() + " already exists");
+        }
+
         Employee employee = new Employee();
 
         employee.setFullName(request.getFullName());
@@ -65,13 +72,14 @@ public class AuthService {
 
         Employee employee = employeeRepository
                 .findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new UserNotFoundException(
+                        "User with email: " + request.getEmail() + " not found"));
 
         if (!passwordEncoder.matches(
                 request.getPassword(),
                 employee.getPassword())) {
 
-            throw new RuntimeException("Invalid Password");
+            throw new InvalidPasswordException("Invalid password provided");
         }
 
         // Ensure role is set, default to EMPLOYEE if null
@@ -113,10 +121,12 @@ public class AuthService {
 
         RefreshToken token = refreshTokenRepository
                 .findByToken(request.getRefreshToken())
-                .orElseThrow();
+                .orElseThrow(() -> new RefreshTokenNotFoundException(
+                        "Refresh token not found"));
 
         if (token.getExpiresDate().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Refresh Token Expired");
+            throw new RefreshTokenExpiredException(
+                    "Refresh token has expired");
         }
 
         Employee user = token.getUser();

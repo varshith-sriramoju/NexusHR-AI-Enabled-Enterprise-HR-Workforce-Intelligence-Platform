@@ -2,6 +2,7 @@ package org.nexushr.authservice.service;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.nexushr.authservice.exception.InvalidTokenException;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -29,12 +30,22 @@ public class JwtService {
 
     public String extractUsername(String token) {
 
-        return Jwts.parser()
-                .verifyWith((javax.crypto.SecretKey) key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .verifyWith((javax.crypto.SecretKey) key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (MalformedJwtException e) {
+            throw new InvalidTokenException("Invalid token format: " + e.getMessage());
+        } catch (ExpiredJwtException e) {
+            throw new InvalidTokenException("Token has expired: " + e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            throw new InvalidTokenException("Token is not supported: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidTokenException("Token is empty or null: " + e.getMessage());
+        }
     }
 
     public boolean isTokenValid(String token) {
