@@ -1,11 +1,11 @@
-import API from "@/api/api.ts";
+import api from "@/api/axios.ts";
 
 export const getPayrolls = async () => {
-    const response = await API.get("/api/payroll");
+    const response = await api.get("/api/payroll");
     return response.data;
 };
 
 export const getEmployeePayroll = async (id: number) => {
-    const response = await API.get(`/api/payroll/${id}`);
+    const response = await api.get(`/api/payroll/${id}`);
     return response.data;
 };

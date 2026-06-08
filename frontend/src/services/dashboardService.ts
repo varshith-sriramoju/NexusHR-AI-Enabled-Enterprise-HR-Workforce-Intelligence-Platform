@@ -1,4 +1,5 @@
-import api from "@/lib/axios";
+// use the project's axios instance
+import api from "@/api/axios.ts";
 
 export const getDashboardStats = async () => {
     const response = await api.get("/api/dashboard/stats");

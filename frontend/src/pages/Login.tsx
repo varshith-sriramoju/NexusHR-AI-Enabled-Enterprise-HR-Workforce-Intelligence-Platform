@@ -60,20 +60,19 @@ function Login() {
     console.log("Email:", email);
     console.log("Password:", password);
 
-    try {
+      try {
       const response = await axios.post("http://localhost:8081/api/auth/login", {
         email: email,
         password: password,
       });
-      console.log("hii..................................")
 
+      // Save token & role via context
       login(response.data.accessToken, response.data.role);
-      console.log("sssssssssssssssssssssssssssssssss")
+
       // Route based on user role
       if (response.data.role === "ADMIN") {
         navigate("/manager");
       } else {
-        localStorage.setItem("token", "test");
         navigate("/dashboard");
       }
     } catch (err) {

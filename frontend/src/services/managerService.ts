@@ -1,4 +1,4 @@
-import api from "@/lib/axios";
+import api from "@/api/axios.ts";
 
 export const getTeamMembers = async () => {
     const response = await api.get("/employees");
