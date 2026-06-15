@@ -1,10 +1,11 @@
 import SockJS from "sockjs-client";
-import Stomp from "stompjs";
+import { Client } from "@stomp/stompjs";
 
 const socket = new SockJS(
-    "http://localhost:8084/ws"
+    "http://localhost:8085/ws"
 );
 
 const stompClient = Stomp.over(socket);
+
 
 export default stompClient;

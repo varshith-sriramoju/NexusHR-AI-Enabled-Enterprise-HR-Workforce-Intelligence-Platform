@@ -26,7 +26,8 @@ import {
   getDepartmentOverview,
   getRecentActivities,
 } from "@/services/dashboardService";
-import Sidebar from "../components/dashboard/Sidebar";
+import Sidebar from "@/components/dashboard/Sidebar";
+import NotificationComponent from "@/components/dashboard/NotificationComponent";
 
 
 function Dashboard() {
@@ -175,6 +176,11 @@ function Dashboard() {
               Here's your workforce summary for today
             </p>
           </div>
+          <div className="mb-8">
+            ...
+          </div>
+
+          <NotificationComponent />
 
           {/* Stats Grid */}
           {
