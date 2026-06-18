@@ -29,6 +29,8 @@ public class Employee {
 
     private String position;
 
+    private String status;
+
     private BigDecimal salary;
 
     @ManyToOne

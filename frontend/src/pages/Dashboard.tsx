@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate } from "react-router-dom";
 import {
   BarChart3,
   Users,
@@ -172,6 +172,12 @@ function Dashboard() {
                 </button>
               </div>
             )}
+            <Link
+                to="/admin-dashboard"
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+            >
+              Admin Dashboard
+            </Link>
             <p className="text-lg text-gray-600">
               Here's your workforce summary for today
             </p>

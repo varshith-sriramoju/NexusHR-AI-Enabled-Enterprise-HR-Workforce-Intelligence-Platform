@@ -30,5 +30,7 @@ public class Payroll {
 
     private Double netSalary;
 
+    private String status;
+
     private LocalDate payDate;
 }

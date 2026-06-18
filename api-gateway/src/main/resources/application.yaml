@@ -4,65 +4,66 @@ spring:
 
   cloud:
     gateway:
-      routes:
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/auth/**
 
-        - id: auth-service
-          uri: http://localhost:8081
-          predicates:
-            - Path=/api/auth/**
+            - id: employee-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/employees/**
 
-        - id: employee-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/employees/**
+            - id: dashboard-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/dashboard/**
 
-        - id: dashboard-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/dashboard/**
+            - id: attendance-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/attendance/**
 
-        - id: attendance-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/attendance/**
+            - id: leave-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/leaves/**
 
-        - id: leave-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/leaves/**
+            - id: performance-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/api/performance/**
 
-        - id: performance-service
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/performance/**
+            - id: payroll-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/payroll/**
 
-        - id: payroll-service
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/payroll/**
+            - id: ai-insights-service
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/ai/**
 
-        - id: ai-insights-service
-          uri: http://localhost:8084
-          predicates:
-            - Path=/api/ai/**
+            - id: notification-service
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/notifications/**
 
-        - id: notification-service
-          uri: http://localhost:8085
-          predicates:
-            - Path=/api/notifications/**
-
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins:
-              - "http://localhost:5173"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-            allowedHeaders: "*"
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:5173"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders: "*"
 
 server:
   port: 8080
@@ -72,6 +73,9 @@ management:
     web:
       exposure:
         include: "*"
+  endpoint:
+    gateway:
+      access: unrestricted
 
 logging:
   level:

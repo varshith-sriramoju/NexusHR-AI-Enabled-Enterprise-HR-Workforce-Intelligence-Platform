@@ -1,0 +1,2 @@
+ALTER TABLE employees
+    ADD COLUMN status VARCHAR(30) DEFAULT 'ACTIVE';

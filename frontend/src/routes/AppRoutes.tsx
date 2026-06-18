@@ -22,6 +22,8 @@ import AttritionPrediction
 import AIInsightsDashboard
     from "../pages/AIInsightsDashboard";
 
+import AdminDashboard from "../pages/AdminDashboard";
+
 const AppRoutes = () => {
 
     return (
@@ -150,6 +152,11 @@ const AppRoutes = () => {
             <Route
                 path="/ai-dashboard"
                 element={<AIInsightsDashboard />}
+            />
+
+            <Route
+                path="/admin-dashboard"
+                element={<AdminDashboard />}
             />
 
         </Routes>

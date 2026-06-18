@@ -1,6 +1,7 @@
 package org.nexushr.payrollservice.service;
 
 import org.nexushr.payrollservice.dto.PayrollRequest;
+import org.nexushr.payrollservice.dto.PayrollSummaryDTO;
 import org.nexushr.payrollservice.entity.Payroll;
 import org.nexushr.payrollservice.repository.PayrollRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import java.time.LocalDate;
 public class PayrollService {
 
     private final PayrollRepository payrollRepository;
+
+
 
     public Payroll generatePayroll(PayrollRequest request) {
 
@@ -34,6 +37,7 @@ public class PayrollService {
                 .deductions(request.getDeductions())
                 .tax(tax)
                 .netSalary(netSalary)
+                .status("PROCESSED")
                 .payDate(LocalDate.now())
                 .build();
 
@@ -64,5 +68,18 @@ public class PayrollService {
                         payroll.getNetSalary(),
                         payroll.getPayDate()
                 );
+    }
+    public PayrollSummaryDTO getPayrollSummary() {
+
+        Double totalPayroll =
+                payrollRepository.getTotalPayroll();
+
+        long processedEmployees =
+                payrollRepository.countByStatus("PROCESSED");
+
+        return new PayrollSummaryDTO(
+                totalPayroll,
+                processedEmployees
+        );
     }
 }

@@ -1,7 +1,9 @@
 package org.nexushr.employeeservice.dto;
+import lombok.*;
 
-
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DashboardStatsDto {
 
     private long totalEmployees;
@@ -9,31 +11,5 @@ public class DashboardStatsDto {
     private long pendingLeaves;
     private double monthlyPayroll;
 
-    public DashboardStatsDto(
-            long totalEmployees,
-            long presentToday,
-            long pendingLeaves,
-            double monthlyPayroll
-    ) {
-        this.totalEmployees = totalEmployees;
-        this.presentToday = presentToday;
-        this.pendingLeaves = pendingLeaves;
-        this.monthlyPayroll = monthlyPayroll;
-    }
 
-    public long getTotalEmployees() {
-        return totalEmployees;
-    }
-
-    public long getPresentToday() {
-        return presentToday;
-    }
-
-    public long getPendingLeaves() {
-        return pendingLeaves;
-    }
-
-    public double getMonthlyPayroll() {
-        return monthlyPayroll;
-    }
 }

@@ -1,5 +1,5 @@
 import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
+import { Stomp } from "@stomp/stompjs";
 
 const socket = new SockJS(
     "http://localhost:8085/ws"
