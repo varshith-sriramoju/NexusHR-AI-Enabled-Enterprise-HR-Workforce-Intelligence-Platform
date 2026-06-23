@@ -15,6 +15,9 @@ public class NotificationService {
 
     private final NotificationRepository repository;
 
+
+    public void sendEmail(NotificationDTO notificationDTO) {}
+
     public void sendNotification(NotificationDTO dto) {
 
         Notification notification = new Notification();
@@ -30,5 +33,14 @@ public class NotificationService {
                 "/topic/notifications/" + dto.getUserId(),
                 dto
         );
+    }
+    private final EmailService emailService;
+    private final SMSservice smsservice;
+    public  void sendApprovedNotification(String email, String phone){
+        emailService.sendEmail(email,"Leave Approved","Your leave has been approved");
+        smsservice.sendSMS(phone,"Leave Approved");
+    }
+    public void sendAttendceRemainder(String email){
+        emailService.sendEmail(email,"Attendance Reminder","Please mark your attendance for today");
     }
 }

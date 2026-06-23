@@ -16,6 +16,8 @@
     <module>auth-service</module>
     <module>employee-service</module>
     <module>payroll-service</module>
+    <module>notification-service</module>
+    <module>ai-insights-service</module>
   </modules>
 
   <properties>

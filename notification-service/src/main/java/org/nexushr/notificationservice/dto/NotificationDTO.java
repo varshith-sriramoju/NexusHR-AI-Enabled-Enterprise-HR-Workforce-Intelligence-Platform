@@ -11,4 +11,6 @@ public class NotificationDTO {
     private String type;
 
     private Long userId;
+
+
 }

@@ -2,7 +2,6 @@ package org.nexushr.employeeservice.service;
 
 import org.nexushr.employeeservice.dto.LeaveRequestDto;
 import org.nexushr.employeeservice.entity.Leave;
-
 import java.util.List;
 
 public interface LeaveService {
@@ -14,4 +13,5 @@ public interface LeaveService {
     Leave rejectLeave(Long leaveId);
 
     List<Leave> getEmployeeLeaves(Long employeeId);
+
 }

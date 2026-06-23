@@ -24,4 +24,9 @@ public class NotificationController {
 
         return ResponseEntity.ok("Notification Sent");
     }
+    @PostMapping("/test")
+        public String test(){
+        service.sendApprovedNotification("sriramoju@gmail.com","9381429861");
+        return "Notification Sent";
+        }
 }
