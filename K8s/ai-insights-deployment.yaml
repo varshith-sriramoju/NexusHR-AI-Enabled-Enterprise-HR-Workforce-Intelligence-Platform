@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ai-insights-service
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-insights
+  template:
+    metadata:
+      labels:
+        app: ai-insights
+    spec:
+      containers:
+        - name: ai-insights
+          image: varshith1001/ai-service:latest
+
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-insights-config
+                  key: SERVER_PORT
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-insights-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-insights-config
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-insights-config
+                  key: DB_NAME
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-insights-config
+                  key: DB_USERNAME
+            - name: EMPLOYEE_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: ai-insights-config
+                  key: EMPLOYEE_SERVICE_URL

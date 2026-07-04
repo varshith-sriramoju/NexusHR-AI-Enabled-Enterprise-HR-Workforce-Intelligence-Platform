@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: notification-service
+
+spec:
+
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: notification
+
+  template:
+
+    metadata:
+      labels:
+        app: notification
+
+    spec:
+
+      containers:
+
+        - name: notification
+
+          image: varshith1001/notfication-service:latest
+
+
+
+          ports:
+            - containerPort: 8085
+
+          env:
+
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-config
+                  key: SERVER_PORT
+
+            - name: MAIL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-config
+                  key: MAIL_HOST
+
+            - name: MAIL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-config
+                  key: MAIL_PORT
+
+            - name: MAIL_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: notification-config
+                  key: MAIL_USERNAME
+
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: notification-secret
+                  key: MAIL_PASSWORD

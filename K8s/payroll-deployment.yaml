@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: payroll-service
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: payroll
+
+  template:
+
+    metadata:
+      labels:
+        app: payroll
+
+    spec:
+
+      containers:
+
+        - name: payroll
+
+          image: varshith1001/payroll-service:latest
+
+
+
+          ports:
+            - containerPort: 8083
+
+          env:
+
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: payroll-config
+                  key: DB_HOST
+
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: payroll-config
+                  key: DB_PORT
+
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: payroll-config
+                  key: DB_NAME
+
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: payroll-config
+                  key: DB_USERNAME
+
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: payroll-config
+                  key: SERVER_PORT
+
+            - name: EMPLOYEE_SERVICE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: payroll-config
+                  key: EMPLOYEE_SERVICE_URL
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: payroll-secret
+                  key: DB_PASSWORD
+
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: payroll-secret
+                  key: JWT_SECRET

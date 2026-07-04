@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: ai-insights-config
+
+data:
+  SERVER_PORT: "8084"
+
+  DB_HOST: postgres-service
+  DB_PORT: "5432"
+  DB_NAME: nexushr
+
+  DB_USERNAME: postgres
+
+  EMPLOYEE_SERVICE_URL: http://employee-service:8082

@@ -1,0 +1,24 @@
+apiVersion: v1
+
+kind: ConfigMap
+
+metadata:
+  name: employee-config
+
+data:
+
+  DB_HOST: postgres-service
+
+  DB_PORT: "5432"
+
+  DB_NAME: nexushr
+
+  DB_USERNAME: postgres
+
+  SERVER_PORT: "8082"
+
+  AUTH_SERVICE_URL: http://auth-service:8081
+
+  REDIS_HOST: redis-service
+
+  REDIS_PORT: "6379"
