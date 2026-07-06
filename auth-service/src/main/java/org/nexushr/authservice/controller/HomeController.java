@@ -11,4 +11,8 @@ public class HomeController {
 
         return "NexusHR auth-service is running";
     }
+    @GetMapping("/test")
+    public String test() {
+        return "i am testing";
+    }
 }
