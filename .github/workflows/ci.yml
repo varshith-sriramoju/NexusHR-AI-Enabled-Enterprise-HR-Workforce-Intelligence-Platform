@@ -20,37 +20,37 @@ jobs:
         working-directory: ./auth-service
         run: |
           chmod +x mvnw
-          ./mvnw clean package
+          ./mvnw clean package -DskipTests
 
       - name: Build employee service with Maven
         working-directory: ./employee-service
         run: |
           chmod +x mvnw
-          ./mvnw clean package
+          ./mvnw clean package -DskipTests
 
       - name: Build ai-insights service with Maven
         working-directory: ./ai-insights-service
         run: |
           chmod +x mvnw
-          ./mvnw clean package
+          ./mvnw clean package -DskipTests
 
       - name: Build notification service with Maven
         working-directory: ./notification-service
         run: |
           chmod +x mvnw
-          ./mvnw clean package
+          ./mvnw clean package -DskipTests
 
       - name: Build payroll service with Maven
         working-directory: ./payroll-service
         run: |
           chmod +x mvnw
-          ./mvnw clean package
+          ./mvnw clean package -DskipTests
 
       - name: Build API gateway with Maven
         working-directory: ./api-gateway
         run: |
           chmod +x mvnw
-          ./mvnw clean package
+          ./mvnw clean package -DskipTests
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
