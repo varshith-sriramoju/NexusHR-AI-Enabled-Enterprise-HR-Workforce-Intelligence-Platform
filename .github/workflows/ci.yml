@@ -1,0 +1,89 @@
+name: nexusHR
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+
+      - name: Build auth service with Maven
+        working-directory: ./auth-service
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
+
+      - name: Build employee service with Maven
+        working-directory: ./employee-service
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
+
+      - name: Build ai-insights service with Maven
+        working-directory: ./ai-insights-service
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
+
+      - name: Build notification service with Maven
+        working-directory: ./notification-service
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
+
+      - name: Build payroll service with Maven
+        working-directory: ./payroll-service
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
+
+      - name: Build API gateway with Maven
+        working-directory: ./api-gateway
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Auth and push to Docker Hub
+        run: |
+          docker build -t varshith1001/auth-service:latest ./auth-service
+          docker push varshith1001/auth-service:latest
+
+      - name: employee gateway and push to Docker Hub
+        run: |
+          docker build -t varshith1001/employee-service:latest ./employee-service
+          docker push varshith1001/employee-service:latest
+
+      - name: payroll gateway and push to Docker Hub
+        run: |
+          docker build -t varshith1001/payroll-service:latest ./payroll-service
+          docker push varshith1001/payroll-service:latest
+
+      - name: ai service and push to Docker Hub
+        run: |
+          docker build -t varshith1001/ai-service:latest ./ai-insights-service
+          docker push varshith1001/ai-service:latest
+
+      - name: notification service and push to Docker Hub
+        run: |
+          docker build -t varshith1001/notfication-service:latest ./notification-service
+          docker push varshith1001/notfication-service:latest
+
+      - name: api gateway and push to Docker Hub
+        run: |
+          docker build -t varshith1001/api-service:latest ./api-gateway
+          docker push varshith1001/api-service:latest
