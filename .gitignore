@@ -1,7 +1,5 @@
 # Maven
 target/
-.mvn/
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 *.jar
@@ -16,8 +14,7 @@ pom.xml.bak
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
-.mvn/timing.properties
-.mvn/wrapper/maven-wrapper.properties
+
 .kotlin
 
 # Node.js
