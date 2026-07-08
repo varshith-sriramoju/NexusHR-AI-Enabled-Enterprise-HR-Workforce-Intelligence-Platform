@@ -118,3 +118,5 @@ postman/environments/environment-local.json
 # System
 .DS_Store
 .vscode
+
+.env
