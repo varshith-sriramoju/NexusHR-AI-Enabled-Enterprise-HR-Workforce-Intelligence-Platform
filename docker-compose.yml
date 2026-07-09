@@ -87,7 +87,7 @@ services:
       MAIL_HOST: smtp.gmail.com
       MAIL_PORT: 587
       MAIL_USERNAME: tonystarkbhaai@gmail.com
-      MAIL_PASSWORD: ${MAIL_PASSWORD}docker 
+      MAIL_PASSWORD: ${MAIL_PASSWORD}docker
 
   api-gateway:
     image: varshith1001/api-gateway:latest
