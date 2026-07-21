@@ -4,95 +4,88 @@ services:
   postgres:
     image: postgres:16
     container_name: postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: nexushr
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - nexushr-network
 
   redis:
     image: redis:7
     container_name: redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
+    networks:
+      - nexushr-network
 
   auth-service:
     image: varshith1001/auth-service:latest
-    restart: unless-stopped
     container_name: auth-service
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: nexushr
-      DB_USERNAME: postgres
-      DB_PASSWORD: root
+    restart: unless-stopped
+    env_file:
+      - .env
     depends_on:
       - postgres
+    networks:
+      - nexushr-network
 
   employee-service:
     image: varshith1001/employee-service:latest
-    restart: unless-stopped
     container_name: employee-service
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: nexushr
-      DB_USERNAME: postgres
-      DB_PASSWORD: root
-      JWT_SECRET: mysecretkeymysecretkeymysecretkey123456
+    restart: unless-stopped
+    env_file:
+      - .env
     depends_on:
       - postgres
       - redis
+    networks:
+      - nexushr-network
 
   payroll-service:
     image: varshith1001/payroll-service:latest
-    restart: unless-stopped
     container_name: payroll-service
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: nexushr
-      DB_USERNAME: postgres
-      DB_PASSWORD: root
+    restart: unless-stopped
+    env_file:
+      - .env
     depends_on:
       - postgres
+    networks:
+      - nexushr-network
 
   ai-insights-service:
     image: varshith1001/ai-insights-service:latest
-    restart: unless-stopped
     container_name: ai-insights-service
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USERNAME: postgres
-      DB_PASSWORD: root
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    restart: unless-stopped
+    env_file:
+      - .env
     depends_on:
       - postgres
       - redis
+    networks:
+      - nexushr-network
 
   notification-service:
     image: varshith1001/notification-service:latest
-    restart: unless-stopped
     container_name: notification-service
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: nexushr
-      DB_USERNAME: postgres
-      DB_PASSWORD: root
-      MAIL_HOST: smtp.gmail.com
-      MAIL_PORT: 587
-      MAIL_USERNAME: tonystarkbhaai@gmail.com
-      MAIL_PASSWORD: ${MAIL_PASSWORD}docker
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - nexushr-network
 
   api-gateway:
     image: varshith1001/api-gateway:latest
-    restart: unless-stopped
     container_name: api-gateway
+    restart: unless-stopped
     ports:
       - "8080:8080"
     depends_on:
@@ -101,15 +94,23 @@ services:
       - payroll-service
       - ai-insights-service
       - notification-service
+    networks:
+      - nexushr-network
 
   frontend:
     image: varshith1001/frontend:latest
-    restart: unless-stopped
     container_name: frontend
+    restart: unless-stopped
     ports:
       - "80:80"
     depends_on:
       - api-gateway
+    networks:
+      - nexushr-network
 
 volumes:
   postgres_data:
+
+networks:
+  nexushr-network:
+    driver: bridge
